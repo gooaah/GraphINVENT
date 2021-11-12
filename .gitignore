@@ -1,2 +1,4 @@
 data/fine-tuning/qsar_model.pickle
 .vscode/*
+*__pycache__*
+train*_*

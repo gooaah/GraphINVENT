@@ -160,7 +160,9 @@ class ScoringFunction:
         return contributions_to_score
 
     def compute_activity(self, mols : list,
-                         activity_model : sklearn.svm.classes.SVC) -> list:
+                         activity_model) -> list: 
+                        # sklearn.svm.classes.SVC cannot be found in some scikit-learn versions.
+                         #activity_model : sklearn.svm.classes.SVC) -> list:
         """
         Note: this function may have to be tuned/replicated depending on how
         the activity model is saved.

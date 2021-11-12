@@ -7,6 +7,7 @@ from typing import Union, Tuple
 import time
 import numpy as np
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import torch
 import rdkit
@@ -180,6 +181,8 @@ class Analyzer:
 
         # calculate validity list now, so as not to write to CSV in previous step
         epoch_id = epoch_label + "_" + str(generation_batch_idx)
+        #print('epoch_id')
+        #print(epoch_id)
         fraction_valid, validity_tensor, _ = util.write_molecules(
             molecules=generated_graphs,
             final_likelihoods=loglikelihoods,

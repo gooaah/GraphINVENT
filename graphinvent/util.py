@@ -679,7 +679,8 @@ def write_molecules(molecules : list,
         step         = epoch.split(" ")[1]
         smi_filename = constants.job_dir + f"generation/step{step}_{label}.smi"
     else:
-        epoch_number = epoch.split(" ")[1]
+        # modify split(" ") to split("_") so that pre_training is available
+        epoch_number = epoch.split("_")[1]
         smi_filename = constants.job_dir + f"generation/epoch_{epoch_number}.smi"
 
     (fraction_valid,

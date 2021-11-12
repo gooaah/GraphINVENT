@@ -26,7 +26,7 @@ FORCE_OVERWRITE  = True                # overwrite job directories which already
 JOBNAME          = "example-job-name"  # used to create a sub directory
 
 # if running using SLURM sbatch, specify params below
-USE_SLURM = False                        # use SLURM or not
+USE_SLURM = True    # use SLURM or not
 RUN_TIME  = "1-00:00:00"                 # hh:mm:ss
 MEM_GB    = 20                           # required RAM in GB
 
@@ -42,7 +42,7 @@ else:
 
 # set paths here
 HOME             = str(Path.home())
-PYTHON_PATH      = f"{HOME}/miniconda3/envs/graphinvent/bin/python"
+PYTHON_PATH      = f"{HOME}/conda-envs/graphinvent/bin/python"
 GRAPHINVENT_PATH = "./graphinvent/"
 DATA_PATH        = "./data/pre-training/"
 
@@ -191,13 +191,18 @@ def write_submission_script(job_dir : str, job_idx : int, job_type : str, max_n_
         submit_file.write(f"#SBATCH --job-name={job_type}{max_n_nodes}_{job_idx}\n")
         submit_file.write(f"#SBATCH --output={job_type}{max_n_nodes}_{job_idx}o\n")
         submit_file.write(f"#SBATCH --time={runtime}\n")
-        submit_file.write(f"#SBATCH --mem={mem}g\n")
+        submit_file.write(f"#SBATCH --mem=90000\n")
+        #submit_file.write(f"#SBATCH --mem={mem}g\n")
         submit_file.write(f"#SBATCH --partition={ptn}\n")
         submit_file.write("#SBATCH --nodes=1\n")
-        submit_file.write(f"#SBATCH --cpus-per-task={cpu_per_task}\n")
+        submit_file.write(f"#SBATCH --cpus-per-task=40\n")
+        #submit_file.write(f"#SBATCH --cpus-per-task={cpu_per_task}\n")
         if ptn == "gpu":
-            submit_file.write("#SBATCH --gres=gpu:1\n")
+            submit_file.write('#SBATCH --constraint="gpu"\n')
+            submit_file.write("#SBATCH --gres=gpu:v100:2\n")
         submit_file.write("hostname\n")
+        submit_file.write("module add cuda/10.1\n")
+        submit_file.write("module add anaconda/3/2021.05\n")
         submit_file.write("export QT_QPA_PLATFORM='offscreen'\n")
         submit_file.write(f"{python_bin_path} {GRAPHINVENT_PATH}main.py --job-dir {job_dir}")
         submit_file.write(f" > {job_dir}output.o${{SLURM_JOB_ID}}\n")
